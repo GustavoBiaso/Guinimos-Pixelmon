@@ -79,6 +79,13 @@ Example mod description.
     # Side this dependency is applied on - BOTH, CLIENT, or SERVER
     side="BOTH"
 
+[[dependencies.${mod_id}]]
+    modId="pixelmon"
+    type="required"
+    versionRange="[9.1,)"
+    ordering="AFTER"
+    side="BOTH"
+
 # Here's another dependency
 [[dependencies.${mod_id}]]
     modId="minecraft"
