@@ -1,4 +1,4 @@
-package com.guinimos.guinimospixelmon;
+package com.guinimos.guinimospixelmon.Events;
 
 import com.pixelmonmod.pixelmon.entities.pixelmon.PixelmonEntity;
 import net.minecraft.ChatFormatting;

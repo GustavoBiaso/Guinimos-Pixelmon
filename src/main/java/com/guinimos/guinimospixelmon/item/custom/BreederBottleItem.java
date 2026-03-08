@@ -18,7 +18,7 @@ public class BreederBottleItem extends Item {
 
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
-        if (!level.isClientSide && entity instanceof Player player) {
+        if (!level.isClientSide && entity instanceof Player) {
             stack.set(ModDataComponents.TIME, stack.get(ModDataComponents.TIME) + 1);
         }
     }
@@ -26,7 +26,7 @@ public class BreederBottleItem extends Item {
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
         if(stack.get(ModDataComponents.TIME) != null){
-            tooltipComponents.add(Component.literal("Time Stored: " + String.valueOf(stack.get(ModDataComponents.TIME))));
+            tooltipComponents.add(Component.literal("Time Stored: " + ((stack.get(ModDataComponents.TIME) / 20) / 60) / 60 + ":" + ((stack.get(ModDataComponents.TIME) / 20) / 60) % 60 + ":"+ (stack.get(ModDataComponents.TIME) / 20) % 60));
         }
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
     }

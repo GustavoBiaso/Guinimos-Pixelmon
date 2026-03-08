@@ -1,0 +1,13 @@
+{
+  "type": "guinimospixelmon:breeder_bottle_tier",
+  "inputBottle": {
+    "item": "guinimospixelmon:breeder_bottle"
+  },
+  "inputItem": {
+    "tag": "c:ingots"
+  },
+  "result": {
+    "id": "minecraft:glass_bottle",
+    "count": 1
+  }
+}

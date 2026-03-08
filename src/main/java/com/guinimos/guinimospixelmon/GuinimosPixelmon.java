@@ -1,9 +1,10 @@
 package com.guinimos.guinimospixelmon;
 
 import com.guinimos.guinimospixelmon.CreativeTabs.ModCreativeTabs;
+import com.guinimos.guinimospixelmon.Events.EventHandler;
 import com.guinimos.guinimospixelmon.component.ModDataComponents;
 import com.guinimos.guinimospixelmon.item.ModItems;
-import com.guinimos.guinimospixelmon.recipes.BreederBottleRecipeSerializer;
+import com.guinimos.guinimospixelmon.recipes.ModRecipes;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -28,11 +29,11 @@ public class GuinimosPixelmon {
         modEventBus.addListener(this::commonSetup);
 
         ModItems.register(modEventBus);
-        ModCreativeTabs.register(modEventBus);
-        NeoForge.EVENT_BUS.register(new EventHandler());
-
         ModDataComponents.register(modEventBus);
+        ModCreativeTabs.register(modEventBus);
+        ModRecipes.register(modEventBus);
 
+        NeoForge.EVENT_BUS.register(new EventHandler());
 
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
