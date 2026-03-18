@@ -21,6 +21,7 @@ public class ModCreativeTabs {
                     .displayItems((itemDisplayParameters, output) -> {
                         output.accept(ModItems.BERRY_CATCHER);
                         output.accept(ModItems.BREEDER_BOTTLE);
+                        output.accept(ModItems.LURE_CRAFTER);
                     }).build());
 
     public static void register(IEventBus eventBus){

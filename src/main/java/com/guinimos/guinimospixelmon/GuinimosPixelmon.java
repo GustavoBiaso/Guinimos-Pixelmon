@@ -5,6 +5,7 @@ import com.guinimos.guinimospixelmon.Events.EventHandler;
 import com.guinimos.guinimospixelmon.component.ModDataComponents;
 import com.guinimos.guinimospixelmon.item.ModItems;
 import com.guinimos.guinimospixelmon.recipes.ModRecipes;
+import com.pixelmonmod.pixelmon.Pixelmon;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -33,7 +34,9 @@ public class GuinimosPixelmon {
         ModCreativeTabs.register(modEventBus);
         ModRecipes.register(modEventBus);
 
-        NeoForge.EVENT_BUS.register(new EventHandler());
+        EventHandler eventHandler = new EventHandler();
+        NeoForge.EVENT_BUS.register(eventHandler);
+        Pixelmon.EVENT_BUS.register(eventHandler);
 
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);

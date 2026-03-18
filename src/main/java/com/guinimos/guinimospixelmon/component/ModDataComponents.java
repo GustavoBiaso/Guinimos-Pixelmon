@@ -15,6 +15,7 @@ public class ModDataComponents {
             DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, GuinimosPixelmon.MODID);
 
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> TIME = register("time", builder -> builder.persistent(Codec.INT));
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> ACTIVE = register("active", builder -> builder.persistent(Codec.BOOL));
 
     private static <T>DeferredHolder<DataComponentType<?>, DataComponentType<T>> register(String name,
                                                                                           UnaryOperator<DataComponentType.Builder<T>> buildOperator){
