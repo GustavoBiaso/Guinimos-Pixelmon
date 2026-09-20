@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "YGX",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "tag": "c:ingots"
+    },
+    "G": {
+      "item": "minecraft:redstone_block"
+    },
+    "Y": {
+      "tag": "pixelmon:pcs"
+    },
+    "X": {
+      "tag": "pixelmon:healers"
+    }
+  },
+  "result": {
+    "id": "guinimospixelmon:portable_healer",
+    "count": 1,
+    "components": {
+      "minecraft:damage": 359
+    }
+  }
+}

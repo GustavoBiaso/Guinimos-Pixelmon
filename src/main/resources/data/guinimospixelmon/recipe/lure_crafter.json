@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "   ",
+    "CRL",
+    "   "
+  ],
+  "key": {
+    "R": {
+      "item": "minecraft:repeater"
+    },
+    "L": {
+      "item": "pixelmon:lure_casing_strong"
+    },
+    "C": {
+      "item": "minecraft:crafting_table"
+    }
+  },
+  "result": {
+    "id": "guinimospixelmon:lure_crafter",
+    "count": 1
+  }
+}

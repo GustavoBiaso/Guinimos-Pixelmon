@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "LLL",
+    "LRL",
+    "LLL"
+  ],
+  "key": {
+    "R": {
+      "item": "minecraft:dragon_egg"
+    },
+    "L": {
+      "item": "pixelmon:dynamax_candy"
+    }
+  },
+  "result": {
+    "id": "guinimospixelmon:dynamax_quest_giver",
+    "count": 1
+  }
+}

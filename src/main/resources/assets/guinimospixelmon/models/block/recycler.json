@@ -1,0 +1,6 @@
+{
+  "parents": "minecraft:block/cube_all",
+  "textures": {
+    "all": "guinimospixelmon:block/recycler"
+  }
+}

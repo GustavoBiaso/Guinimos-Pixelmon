@@ -2,6 +2,14 @@
   "item.guinimospixelmon.berry_catcher": "Berry Catcher",
   "item.guinimospixelmon.breeder_bottle": "Breeder Bottle",
   "item.guinimospixelmon.lure_crafter": "Lure Crafter",
+  "item.guinimospixelmon.poke_hunter": "Poke Hunter",
+  "item.guinimospixelmon.dynamax_quest_giver": "Dynamax Quest Giver",
+  "item.guinimospixelmon.portable_healer": "Portable Healer",
+  "item.guinimospixelmon.moltres_temple_map": "Moltres Temple Map",
+  "item.guinimospixelmon.zapdos_temple_map": "Zapdos Temple Map",
+  "item.guinimospixelmon.articuno_temple_map": "Articuno Temple Map",
+
+  "block.guinimospixelmon.recycler:": "Recycler",
 
   "creativetab.guinimospixelmon.items": "Guinimos Pixelmon"
 }

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "guinimospixelmon:item/articuno_temple_map"
+  }
+}

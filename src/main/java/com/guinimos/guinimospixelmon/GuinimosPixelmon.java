@@ -1,9 +1,12 @@
 package com.guinimos.guinimospixelmon;
 
-import com.guinimos.guinimospixelmon.CreativeTabs.ModCreativeTabs;
-import com.guinimos.guinimospixelmon.Events.EventHandler;
+import com.guinimos.guinimospixelmon.block.ModBlocks;
+import com.guinimos.guinimospixelmon.commands.ModCommands;
+import com.guinimos.guinimospixelmon.creativetabs.ModCreativeTabs;
+import com.guinimos.guinimospixelmon.events.EventHandler;
 import com.guinimos.guinimospixelmon.component.ModDataComponents;
 import com.guinimos.guinimospixelmon.item.ModItems;
+import com.guinimos.guinimospixelmon.menuscreens.ModMenus;
 import com.guinimos.guinimospixelmon.recipes.ModRecipes;
 import com.pixelmonmod.pixelmon.Pixelmon;
 import org.slf4j.Logger;
@@ -30,9 +33,12 @@ public class GuinimosPixelmon {
         modEventBus.addListener(this::commonSetup);
 
         ModItems.register(modEventBus);
+        ModBlocks.register(modEventBus);
         ModDataComponents.register(modEventBus);
-        ModCreativeTabs.register(modEventBus);
         ModRecipes.register(modEventBus);
+        ModMenus.register(modEventBus);
+        ModCreativeTabs.register(modEventBus);
+        ModCommands.register();
 
         EventHandler eventHandler = new EventHandler();
         NeoForge.EVENT_BUS.register(eventHandler);

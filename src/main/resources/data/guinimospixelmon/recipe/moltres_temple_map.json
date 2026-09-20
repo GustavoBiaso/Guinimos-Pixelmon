@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "PPP",
+    "PXP",
+    "PPP"
+  ],
+  "key": {
+    "P": {
+      "item": "minecraft:paper"
+    },
+    "X": {
+      "item": "pixelmon:fire_stone"
+    }
+  },
+  "result": {
+    "id": "guinimospixelmon:moltres_temple_map",
+    "count": 1
+  }
+}

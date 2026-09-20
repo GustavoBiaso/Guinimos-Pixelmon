@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "guinimospixelmon:item/dynamax_quest_giver"
+  }
+}

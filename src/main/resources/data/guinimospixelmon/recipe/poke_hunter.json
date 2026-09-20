@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "GYG",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "tag": "c:ingots"
+    },
+    "G": {
+      "item": "minecraft:redstone_lamp"
+    },
+    "Y": {
+      "tag": "pixelmon:pcs"
+    }
+  },
+  "result": {
+    "id": "guinimospixelmon:poke_hunter",
+    "count": 1
+  }
+}
