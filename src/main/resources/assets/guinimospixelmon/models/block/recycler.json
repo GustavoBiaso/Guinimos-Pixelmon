@@ -1,6 +1,12 @@
 {
-  "parents": "minecraft:block/cube_all",
+  "parent": "minecraft:block/cube",
   "textures": {
-    "all": "guinimospixelmon:block/recycler"
+    "particle": "guinimospixelmon:block/recycler_base",
+    "up": "guinimospixelmon:block/recycler_base",
+    "down": "guinimospixelmon:block/recycler_base",
+    "north": "guinimospixelmon:block/recycler_base_front",
+    "south": "guinimospixelmon:block/recycler_base",
+    "east": "guinimospixelmon:block/recycler_base_right",
+    "west": "guinimospixelmon:block/recycler_base_left"
   }
 }

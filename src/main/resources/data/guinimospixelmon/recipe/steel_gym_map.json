@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "PPP",
+    "PXP",
+    "PPP"
+  ],
+  "key": {
+    "P": {
+      "item": "minecraft:paper"
+    },
+    "X": {
+      "item": "pixelmon:steel_gem"
+    }
+  },
+  "result": {
+    "id": "guinimospixelmon:steel_gym_map",
+    "count": 1
+  }
+}

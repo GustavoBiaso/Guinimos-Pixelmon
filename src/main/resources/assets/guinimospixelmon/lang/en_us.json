@@ -5,11 +5,26 @@
   "item.guinimospixelmon.poke_hunter": "Poke Hunter",
   "item.guinimospixelmon.dynamax_quest_giver": "Dynamax Quest Giver",
   "item.guinimospixelmon.portable_healer": "Portable Healer",
+
   "item.guinimospixelmon.moltres_temple_map": "Moltres Temple Map",
   "item.guinimospixelmon.zapdos_temple_map": "Zapdos Temple Map",
   "item.guinimospixelmon.articuno_temple_map": "Articuno Temple Map",
+  "item.guinimospixelmon.celebi_temple_map": "Celebi Temple Map",
+  "item.guinimospixelmon.arceus_temple_map": "Arceus Temple Map",
 
-  "block.guinimospixelmon.recycler:": "Recycler",
+  "item.guinimospixelmon.dragon_gym_map": "Dragon Gym Map",
+  "item.guinimospixelmon.electric_gym_map": "Electric Gym Map",
+  "item.guinimospixelmon.fairy_gym_map": "Fairy Gym Map",
+  "item.guinimospixelmon.fire_gym_map": "Fire Gym Map",
+  "item.guinimospixelmon.ghost_gym_map": "Ghost Gym Map",
+  "item.guinimospixelmon.grass_gym_map": "Grass Gym Map",
+  "item.guinimospixelmon.ground_gym_map": "Ground Gym Map",
+  "item.guinimospixelmon.ice_gym_map": "Ice Gym Map",
+  "item.guinimospixelmon.steel_gym_map": "Steel Gym Map",
+  "item.guinimospixelmon.water_gym_map": "Water Gym Map",
+
+  "block.guinimospixelmon.recycler": "Recycler",
+  "item.guinimospixelmon.recycler": "Recycler",
 
   "creativetab.guinimospixelmon.items": "Guinimos Pixelmon"
 }

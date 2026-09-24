@@ -26,10 +26,26 @@ public class ModCreativeTabs {
                         output.accept(ModItems.POKE_HUNTER);
                         output.accept(ModItems.DYNAMAX_QUEST_GIVER);
                         output.accept(ModItems.PORTABLE_HEALER);
+
                         output.accept(ModItems.MOLTRES_MAP);
                         output.accept(ModItems.ZAPDOS_MAP);
                         output.accept(ModItems.ARTICUNO_MAP);
+                        output.accept(ModItems.ARCEUS_MAP);
+                        output.accept(ModItems.CELEBI_MAP);
+
+                        output.accept(ModItems.DRAGON_GYM_MAP);
+                        output.accept(ModItems.ELECTRIC_GYM_MAP);
+                        output.accept(ModItems.ICE_GYM_MAP);
+                        output.accept(ModItems.GRASS_GYM_MAP);
+                        output.accept(ModItems.STEEL_GYM_MAP);
+                        output.accept(ModItems.FIRE_GYM_MAP);
+                        output.accept(ModItems.GHOST_GYM_MAP);
+                        output.accept(ModItems.FAIRY_GYM_MAP);
+                        output.accept(ModItems.GROUND_GYM_MAP);
+                        output.accept(ModItems.WATER_GYM_MAP);
+
                         output.accept(ModBlocks.RECYCLER);
+                        output.accept(ModBlocks.RECYCLER_ITEM);
                     }).build());
 
     public static void register(IEventBus eventBus){

@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.mojang.logging.LogUtils;
 import com.pixelmonmod.api.registry.RegistryValue;
 import com.pixelmonmod.pixelmon.api.pokemon.species.Species;
 import com.pixelmonmod.pixelmon.api.registries.PixelmonSpecies;
@@ -11,50 +13,86 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.RandomSource;
-import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
+import net.neoforged.fml.loading.FMLPaths;
+import org.slf4j.Logger;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
-public class PokeHunt extends SimpleJsonResourceReloadListener {
+public class PokeHunt {
 
     private static final int RARITIES = 5;
     private static final int PER_RARITY = 5;
 
     public static final PokeHunt INSTANCE = new PokeHunt();
 
-    private PokeHunt() {
-        super(new Gson(), "hunt_rarity");
-    }
+    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Gson GSON = new Gson();
+
+    private static final String DEFAULT_RESOURCE_PATH = "/guinimospixelmon/rarity.json";
 
     private final Map<Integer, List<RegistryValue<Species>>> pokemonByDifficulty = new HashMap<>();
 
-    @Override
-    protected void apply(Map<ResourceLocation, JsonElement> object, ResourceManager resourceManager, ProfilerFiller profiler) {
-        pokemonByDifficulty.clear();
+    private PokeHunt() {}
 
-        for (Map.Entry<ResourceLocation, JsonElement> fileEntry : object.entrySet()) {
+    public void load() {
+        Path file = FMLPaths.CONFIGDIR.get().resolve("guinimospixelmon").resolve("rarity.json");
+        try {
+            if (Files.notExists(file)) {
+                Files.createDirectories(file.getParent());
+                copyDefaultTo(file);
+            }
 
-            JsonArray array = fileEntry.getValue().getAsJsonArray();
-            for (JsonElement entry : array) {
-                JsonObject obj = entry.getAsJsonObject();
+            pokemonByDifficulty.clear();
+            int total = 0;
+            int skipped = 0;
 
-                String name = obj.get("name").getAsString();
-                int difficulty = obj.get("difficulty").getAsInt();
+            try (Reader reader = Files.newBufferedReader(file, StandardCharsets.UTF_8)) {
+                JsonArray array = JsonParser.parseReader(reader).getAsJsonArray();
+                for (JsonElement el : array) {
+                    JsonObject obj = el.getAsJsonObject();
+                    String name = obj.get("name").getAsString();
+                    int difficulty = obj.get("difficulty").getAsInt();
 
-                RegistryValue<Species> species = PixelmonSpecies.fromName(name);
-                if (species != null && species.get() != null) {
+                    RegistryValue<Species> species = PixelmonSpecies.fromName(name);
+                    if (species == null || species.get() == null) {
+                        LOGGER.warn("Poke Hunt: espécie '{}' não encontrada, ignorando", name);
+                        skipped++;
+                        continue;
+                    }
+                    if (difficulty < 1 || difficulty > RARITIES) {
+                        LOGGER.warn("Poke Hunt: dificuldade inválida ({}) para '{}', ignorando", difficulty, name);
+                        skipped++;
+                        continue;
+                    }
+
                     pokemonByDifficulty.computeIfAbsent(difficulty, d -> new ArrayList<>()).add(species);
+                    total++;
                 }
             }
-        }
 
-        int total = pokemonByDifficulty.values().stream().mapToInt(List::size).sum();
+            LOGGER.info("Poke Hunt: {} pokémons carregados de {} ({} ignorados)", total, file, skipped);
+        } catch (IOException | RuntimeException e) {
+            LOGGER.error("Poke Hunt: falha ao ler {}", file, e);
+        }
+    }
+
+    private void copyDefaultTo(Path target) throws IOException {
+        try (InputStream in = PokeHunt.class.getResourceAsStream(DEFAULT_RESOURCE_PATH)) {
+            if (in == null) {
+                throw new IOException("Recurso padrão " + DEFAULT_RESOURCE_PATH + " não encontrado no jar");
+            }
+            Files.copy(in, target);
+        }
     }
 
     public List<RegistryValue<Species>> rollHuntList() {

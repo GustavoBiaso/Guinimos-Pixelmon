@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "PPP",
+    "PXP",
+    "PPP"
+  ],
+  "key": {
+    "P": {
+      "item": "minecraft:paper"
+    },
+    "X": {
+      "item": "pixelmon:water_gem"
+    }
+  },
+  "result": {
+    "id": "guinimospixelmon:water_gym_map",
+    "count": 1
+  }
+}

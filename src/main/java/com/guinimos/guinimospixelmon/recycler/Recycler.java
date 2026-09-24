@@ -1,65 +1,110 @@
 package com.guinimos.guinimospixelmon.recycler;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
+import com.google.gson.*;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.item.Item;
+import net.neoforged.fml.loading.FMLPaths;
 import org.slf4j.Logger;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
-public class Recycler extends SimpleJsonResourceReloadListener {
-    public Recycler() {
-        super(new Gson(), "shop_list");
-    }
+public final class Recycler {
+
+    public static final Recycler INSTANCE = new Recycler();
 
     private static final Logger LOGGER = LogUtils.getLogger();
-    private static volatile Map<Item, ShopEntry> entries = Map.of();
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private static final String DEFAULT_RESOURCE_PATH = "/guinimospixelmon/shoplist.json";
 
-    public static List<ShopEntry> entries() {
-        return List.copyOf(entries.values());
-    }
-
-    /** Busca pelo item (usada para validar transações no servidor). */
-    public static Optional<ShopEntry> find(Item item) {
-        return Optional.ofNullable(entries.get(item));
-    }
-
-    @Override
-    protected void apply(Map<ResourceLocation, JsonElement> files, ResourceManager resourceManager, ProfilerFiller profiler) {
-        Map<Item, ShopEntry> loaded = new LinkedHashMap<>();
-
-        // TreeMap dá uma ordem estável entre arquivos
-        for (Map.Entry<ResourceLocation, JsonElement> file : new TreeMap<>(files).entrySet()) {
-            ResourceLocation id = file.getKey();
-            JsonElement root = file.getValue();
-
-            if (!root.isJsonObject()) {
-                LOGGER.error("[Vending] {} ignorado: o arquivo precisa ser um objeto JSON", id);
-                continue;
-            }
-            JsonElement itemsJson = root.getAsJsonObject().get("items");
-            if (itemsJson == null || !itemsJson.isJsonArray()) {
-                LOGGER.error("[Vending] {} ignorado: campo 'items' ausente ou não é uma lista", id);
-                continue;
-            }
-
-            // Cada entrada é lida sozinha: uma linha errada não derruba as outras
-            for (JsonElement element : itemsJson.getAsJsonArray()) {
-                DataResult<ShopEntry> result = ShopEntry.CODEC.parse(JsonOps.INSTANCE, element);
-                result.error().ifPresentOrElse(
-                        error -> LOGGER.error("[Vending] Entrada ignorada em {}: {}", id, error.message()),
-                        () -> result.result().ifPresent(entry -> loaded.put(entry.item(), entry)));
-            }
+    public record Entry(Item item, int buyPrice) {
+        public int sellPrice() {
+            return buyPrice / 2;
         }
+    }
 
-        entries = Collections.unmodifiableMap(loaded);
-        LOGGER.info("[Vending] {} itens carregados na máquina de vendas", loaded.size());
+    private volatile List<Entry> entries = List.of();
+
+    private Recycler() {}
+
+    public List<Entry> entries() {
+        return entries;
+    }
+
+    public Optional<Entry> find(Item item) {
+        for (Entry e : entries) {
+            if (e.item() == item) return Optional.of(e);
+        }
+        return Optional.empty();
+    }
+
+    public void load() {
+        Path file = FMLPaths.CONFIGDIR.get().resolve("guinimospixelmon").resolve("shoplist.json");
+        try {
+            if (Files.notExists(file)) {
+                Files.createDirectories(file.getParent());
+                copyDefaultTo(file);
+            }
+
+            List<Entry> loaded = new ArrayList<>();
+            try (Reader reader = Files.newBufferedReader(file)) {
+                JsonArray array = JsonParser.parseReader(reader).getAsJsonArray();
+                for (JsonElement el : array) {
+                    parseEntry(el).ifPresent(loaded::add);
+                }
+            }
+            this.entries = List.copyOf(loaded);
+            LOGGER.info("Vending machine: {} itens carregados de {}", loaded.size(), file);
+        } catch (IOException | RuntimeException e) {
+            LOGGER.error("Vending machine: falha ao ler {}", file, e);
+        }
+    }
+
+    private void copyDefaultTo(Path target) throws IOException {
+        try (InputStream in = Recycler.class.getResourceAsStream(DEFAULT_RESOURCE_PATH)) {
+            if (in == null) {
+                throw new IOException("Recurso padrão " + DEFAULT_RESOURCE_PATH + " não encontrado no jar");
+            }
+            Files.copy(in, target);
+        }
+    }
+
+
+    private Optional<Entry> parseEntry(JsonElement el) {
+        try {
+            JsonObject obj = el.getAsJsonObject();
+            String id = obj.get("item").getAsString();
+            int price = obj.get("price").getAsInt();
+
+            ResourceLocation rl = ResourceLocation.tryParse(id);
+            if (rl == null) {
+                LOGGER.warn("Vending machine: id inválido '{}'", id);
+                return Optional.empty();
+            }
+            Optional<Item> item = BuiltInRegistries.ITEM.getOptional(rl);
+            if (item.isEmpty() || item.get() == net.minecraft.world.item.Items.AIR) {
+                LOGGER.warn("Vending machine: item '{}' não existe, ignorando", id);
+                return Optional.empty();
+            }
+            if (price <= 0) {
+                LOGGER.warn("Vending machine: preço inválido ({}) para '{}', ignorando", price, id);
+                return Optional.empty();
+            }
+            return Optional.of(new Entry(item.get(), price));
+        } catch (RuntimeException e) {
+            LOGGER.warn("Vending machine: entrada malformada {}", el, e);
+            return Optional.empty();
+        }
     }
 }

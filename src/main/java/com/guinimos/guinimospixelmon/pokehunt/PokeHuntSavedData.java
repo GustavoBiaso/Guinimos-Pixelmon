@@ -22,6 +22,8 @@ public class PokeHuntSavedData extends SavedData {
 
     private List<String> pokemonNames = new ArrayList<>();
 
+    private long lastRoll = 0L;
+
     public static PokeHuntSavedData create() {
         return new PokeHuntSavedData();
     }
@@ -29,6 +31,7 @@ public class PokeHuntSavedData extends SavedData {
     public static PokeHuntSavedData load(CompoundTag tag, HolderLookup.Provider lookupProvider) {
         PokeHuntSavedData data = create();
         ListTag list = tag.getList("pokemon", Tag.TAG_STRING);
+        data.lastRoll = tag.getLong("LastRoll");
         for (Tag t : list) {
             data.pokemonNames.add(t.getAsString());
         }
@@ -42,6 +45,7 @@ public class PokeHuntSavedData extends SavedData {
             list.add(StringTag.valueOf(name));
         }
         tag.put("pokemon", list);
+        tag.putLong("LastRoll", lastRoll);
         return tag;
     }
 
@@ -88,5 +92,12 @@ public class PokeHuntSavedData extends SavedData {
 
         setDirty();
         return OptionalInt.of(difficulty);
+    }
+
+    public long getLastRoll() { return lastRoll; }
+
+    public void setLastRoll(long value) {
+        this.lastRoll = value;
+        setDirty();
     }
 }

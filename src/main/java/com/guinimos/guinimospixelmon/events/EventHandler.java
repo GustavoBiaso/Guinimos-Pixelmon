@@ -1,6 +1,7 @@
 package com.guinimos.guinimospixelmon.events;
 
 import com.guinimos.guinimospixelmon.item.custom.LureCrafterItem;
+import com.guinimos.guinimospixelmon.menuscreens.pokehunter.PokeHunterMenu;
 import com.guinimos.guinimospixelmon.pokehunt.PokeHunt;
 import com.guinimos.guinimospixelmon.pokehunt.PokeHuntSavedData;
 import com.guinimos.guinimospixelmon.pokehunt.PokeHunterRewards;
@@ -13,6 +14,7 @@ import com.pixelmonmod.pixelmon.items.LureItem;
 import com.pixelmonmod.pixelmon.items.heldItems.BerryItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -20,17 +22,17 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
 
 public class EventHandler {
-    @SubscribeEvent
-    public void onAddReloadListeners(AddReloadListenerEvent event) {
-        event.addListener(PokeHunt.INSTANCE);
-    }
+    private static final long RESET_INTERVAL_MS = 30L * 60L * 1000L;
 
     @SubscribeEvent
     public void onServerStarted(ServerStartedEvent event) {
+        PokeHunt.INSTANCE.load();
         PokeHuntSavedData data = PokeHuntSavedData.get(event.getServer());
+        Recycler.INSTANCE.load();
 
         if (data.getCurrentHunt().isEmpty()) {
             data.setHunt(PokeHunt.INSTANCE.rollHuntList());
@@ -77,6 +79,31 @@ public class EventHandler {
         PokeHuntSavedData data = PokeHuntSavedData.get(player.getServer());
 
         data.onCaptured(species).ifPresent(difficulty -> PokeHunterRewards.give(player, difficulty));
+    }
+
+    @SubscribeEvent
+    public void onServerTick(ServerTickEvent.Post event) {
+        MinecraftServer server = event.getServer();
+        if (server.getTickCount() % 20 != 0) return;
+
+        PokeHuntSavedData data = PokeHuntSavedData.get(event.getServer());
+        long now = System.currentTimeMillis();
+
+        if (data.getLastRoll() == 0L) {
+            data.setLastRoll(now);
+            return;
+        }
+        if (now - data.getLastRoll() < RESET_INTERVAL_MS) return;
+
+        PokeHunt.INSTANCE.rollHuntList();
+        data.setLastRoll(now);
+
+        for (ServerPlayer p : server.getPlayerList().getPlayers()) {
+            if (p.containerMenu instanceof PokeHunterMenu){
+                p.closeContainer();
+                server.getPlayerList().broadcastSystemMessage(Component.literal("A lista do Poke Hunter foi renovada!"), false);
+            }
+        }
     }
 
     private static Boolean isLureOnThenRemoveBerries(Player player) {

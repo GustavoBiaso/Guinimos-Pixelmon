@@ -1,7 +1,8 @@
 {
   "variants": {
-    "": {
-      "model": "guinimospixelmon:block/recycler"
-    }
+    "facing=north": { "model": "guinimospixelmon:block/recycler" },
+    "facing=east":  { "model": "guinimospixelmon:block/recycler", "y": 90 },
+    "facing=south": { "model": "guinimospixelmon:block/recycler", "y": 180 },
+    "facing=west":  { "model": "guinimospixelmon:block/recycler", "y": 270 }
   }
 }

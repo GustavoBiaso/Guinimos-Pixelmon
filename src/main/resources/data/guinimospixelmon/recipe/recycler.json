@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "CZY",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "tag": "c:ingots"
+    },
+    "C": {
+      "item": "pixelmon:amulet_coin"
+    },
+    "Z": {
+      "tag": "pixelmon:trade_machines"
+    },
+    "Y": {
+      "tag": "pixelmon:vending_machines"
+    }
+  },
+  "result": {
+    "id": "guinimospixelmon:recycler",
+    "count": 1
+  }
+}
