@@ -9,6 +9,7 @@ import com.guinimos.guinimospixelmon.recycler.Recycler;
 import com.pixelmonmod.pixelmon.api.events.CaptureEvent;
 import com.pixelmonmod.pixelmon.api.events.lures.LureExpiredEvent;
 import com.pixelmonmod.pixelmon.api.pokemon.species.Species;
+import com.pixelmonmod.pixelmon.entities.WormholeEntity;
 import com.pixelmonmod.pixelmon.entities.pixelmon.PixelmonEntity;
 import com.pixelmonmod.pixelmon.items.LureItem;
 import com.pixelmonmod.pixelmon.items.heldItems.BerryItem;
@@ -40,7 +41,7 @@ public class EventHandler {
     }
 
     @SubscribeEvent
-    public void onPokemonSpawn(EntityJoinLevelEvent event){
+    public void onEntitySpawn(EntityJoinLevelEvent event){
         if(event.getLevel().isClientSide()) return;
         if(event.getEntity() instanceof PixelmonEntity pokemon){
             if(pokemon.isBossPokemon()) {
@@ -48,6 +49,12 @@ public class EventHandler {
                 assert nearest != null;
                 nearest.sendSystemMessage(Component.literal("A Boss Pokemon spawned next to you!").withStyle(ChatFormatting.RED));
             }
+        }
+
+        if(event.getEntity() instanceof WormholeEntity wormhole) {
+            Player nearest = wormhole.level().getNearestPlayer(wormhole, 200.0D);
+            assert nearest != null;
+            nearest.sendSystemMessage(Component.literal("An Ultra Wormhole opened near you!").withStyle(ChatFormatting.AQUA));
         }
     }
 
